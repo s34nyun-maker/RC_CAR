@@ -25,24 +25,33 @@ jobs:
           distribution: 'zulu'
           java-version: '17'
 
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
 
-      - name: Generate Flutter Boilerplate (Preserving our lib folder)
+      - name: Generate Flutter Boilerplate
         run: |
-          mkdir -p temp_lib
-          cp -r lib/* temp_lib/
-          flutter create --org com.s34nyun_maker --project-name rc_car --force .
-          rm -rf lib
-          mv temp_lib lib
+          # Create temporary project in a clean directory to avoid any conflicts
+          flutter create --org com.s34nyun_maker --project-name rc_car temp_project
+          
+          # Copy all platform-specific folders and configuration, preserving our custom lib folder
+          cp -r temp_project/android .
+          cp -r temp_project/ios .
+          cp -r temp_project/web .
+          cp temp_project/pubspec.yaml .
+          
+          # Remove the temporary project
+          rm -rf temp_project
 
       - name: Install dependencies
         run: flutter pub get
 
       - name: Build APK
-        run: flutter build apk --release --verbose
+        run: flutter build apk --release
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
