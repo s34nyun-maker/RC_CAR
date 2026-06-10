@@ -11,9 +11,6 @@ on:
       - master
   workflow_dispatch:
 
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -33,14 +30,19 @@ jobs:
         with:
           channel: 'stable'
 
-      - name: Generate Flutter Boilerplate (including Android folder)
-        run: flutter create --org com.s34nyun_maker --project-name rc_car .
+      - name: Generate Flutter Boilerplate (Preserving our lib folder)
+        run: |
+          mkdir -p temp_lib
+          cp -r lib/* temp_lib/
+          flutter create --org com.s34nyun_maker --project-name rc_car --force .
+          rm -rf lib
+          mv temp_lib lib
 
       - name: Install dependencies
         run: flutter pub get
 
       - name: Build APK
-        run: flutter build apk --release
+        run: flutter build apk --release --verbose
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
