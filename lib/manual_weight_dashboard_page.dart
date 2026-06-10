@@ -321,7 +321,7 @@ class _ManualWeightDashboardPageState extends State<ManualWeightDashboardPage> {
                         backgroundColor: colorPrimary,
                         foregroundColor: Colors.black,
                         padding: const EdgeInsets.symmetric(vertical: 16),
-                        fontWeight: FontWeight.bold,
+                        textStyle: const TextStyle(fontWeight: FontWeight.bold),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),
@@ -543,7 +543,7 @@ class _ManualWeightDashboardPageState extends State<ManualWeightDashboardPage> {
           ),
           const SizedBox(height: 4),
           Container(
-            padding: const EdgeInsets.top(6),
+            padding: const EdgeInsets.only(top: 6),
             decoration: BoxDecoration(
               border: Border(top: BorderSide(color: Colors.white.withOpacity(0.05))),
             ),
